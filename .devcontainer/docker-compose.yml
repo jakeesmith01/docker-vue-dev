@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ../..:/workspaces:cached
+    # Overrides default command so things don't shut down after the process ends.
+    command: sleep infinity
+  
+  # Additional Services
+  mysqlnvd:
+    image: mysql:lts
+    container_name: mysqlnvd
+    environment:
+      MYSQL_HOST: mysqlnvd
+      MYSQL_DATABASE: database
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_RANDOM_ROOT_PASSWORD: fact
+
+  phpmyadminnvd:
+    image: phpmyadmin:latest
+    container_name: phpmyadminnvd
+    environment:
+      PMA_ARBITRARY: 1
+    ports:
+      - '8080:80'
